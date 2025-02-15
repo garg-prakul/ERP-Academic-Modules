@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code</title>
+    <link rel="stylesheet" href="/public/verify.css">
+
+</head>
+<body>
+    <h2>Verify Code</h2>
+    <p>We have sent a 6-digit verification code to your email: <strong><%= email %></strong></p>
+    
+    <form action="/forget-password" method="POST">
+        <input type="hidden" name="email" value="<%= email %>">
+        
+        <label for="code">Enter Verification Code:</label>
+        <input type="text" name="code" required minlength="6" maxlength="6">
+        
+        <button type="submit">Verify</button>
+    </form>
+
+    <a href="/forget-password">Resend Code</a>
+    <br>
+    <a href="/login">Back to Login</a>
+</body>
+</html>

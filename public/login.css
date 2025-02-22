@@ -1,6 +1,6 @@
 /* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #f4f4f9;
     display: flex;
     justify-content: center;
@@ -18,21 +18,22 @@ body {
 /* Login Box */
 .login-box {
     background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 /* Heading */
 h2 {
-    color: #333;
+    color: #0a3a77;
     margin-bottom: 20px;
+    font-size: 24px;
 }
 
 /* Input Group */
 .input-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     text-align: left;
 }
 
@@ -47,14 +48,14 @@ h2 {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 16px;
 }
 
 /* Forgot Password */
 .forgot-password {
     text-align: right;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .forgot-password a {
@@ -69,12 +70,12 @@ h2 {
 
 /* Button */
 button {
-    background-color: #007bff;
+    background-color: #0a3a77;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
     width: 100%;
 }

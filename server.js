@@ -8,19 +8,20 @@ import crypto from "crypto";
 
 dotenv.config();
 const app = express();
-const port = process.env.SERVER_PORT || 3000;
+const port = process.env.SERVER_PORT || 4000; // Ensure SERVER_PORT is defined in .env
 let verificationCodes = {}; // Store codes temporarily
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+app.use(express.static("public")); // Updated path to serve static files
+app.set("view engine", "ejs"); // Ensure EJS is set as the view engine
 
 // Database connection
 const db = new pg.Client({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
+    user: process.env.DB_USER || "postgres", // Ensure DB_USER is defined in .env
+    host: process.env.DB_HOST || "localhost", // Ensure DB_HOST is defined in .env
+    database: process.env.DB_NAME || "user_data", // Ensure DB_NAME is defined in .env
+    password: process.env.DB_PASSWORD , // Ensure DB_PASSWORD is defined in .env
+    port: process.env.DB_PORT || 5432, // Ensure DB_PORT is defined in .env
 });
 
 db.connect()
@@ -46,7 +47,7 @@ function getUserRole(email) {
 
 // Home page
 app.get("/", (req, res) => {
-    res.render("home.ejs");
+    res.render("../views/home.ejs");
 });
 
 // Login page
@@ -59,7 +60,7 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const result = await db.query("SELECT password FROM users WHERE email = $1", [email]);
+        const result = await db.query("SELECT password FROM user_data WHERE email = $1", [email]);
 
         if (result.rows.length > 0) {
             const hashedPassword = result.rows[0].password;
@@ -84,16 +85,15 @@ app.post("/login", async (req, res) => {
     }
 });
 
-// ✅ Step 1: Request Forgot Password (Send Verification Code)
 app.get("/forget-password", (req, res) => {
-    res.render("forget-password.ejs");
+    res.render("../views/forget-password.ejs");
 });
 
 app.post("/forget-password", async (req, res) => {
     const { email } = req.body;
 
     try {
-        const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+        const result = await db.query("SELECT * FROM user_data WHERE email = $1", [email]);
 
         if (result.rows.length === 0) {
             return res.status(404).send("User not found");
@@ -143,3 +143,4 @@ app.post("/verify", (req, res) => {
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
 });
+

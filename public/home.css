@@ -1,0 +1,140 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+.header {
+    background-color: #f8c100;
+    padding: 10px 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.header .logo-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    flex-grow: 1; /* Ensures text remains centered */
+}
+
+.header img {
+    width: 100px;
+}
+
+.header h2 {
+    font-size: 22px;
+    margin: 5px 0;
+    color: #0a3a77;
+}
+
+.header h3 {
+    font-size: 16px;
+    margin: 0;
+    color: black;
+}
+
+/* Login Button at Top-Right */
+.login-button {
+    background-color: #0a3a77;
+    color:#f8c100;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid #f8c100;
+    position: absolute;
+    right: 100px; /* Moves button to top-right */
+    top: 4%;
+    transform: translateY(-50%);
+}
+
+.register-button {
+    background-color: #0a3a77;
+    color:#f8c100;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid #f8c100;
+    position: absolute;
+    right: 6px; /* Moves button to top-right */
+    top: 4%;
+    transform: translateY(-50%);   
+}
+
+.btn-container {
+    display: flex;
+    gap: 10px; /* Add space between buttons */
+    position: absolute;
+    right: 20px; /* Adjust position from the right */
+    top: 20px; /* Adjust position from the top */
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #002a6c;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu-icon {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+
+.myiit-button {
+    background-color: #f8c100;
+    color: black;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    border: none;
+}
+
+.myiit-button img {
+    width: 18px;
+}
+
+/* Banner Image */
+.banner {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+
+/* About Section */
+.about {
+    padding: 40px 20px;
+    background-color: white;
+    max-width: 800px;
+    margin: auto;
+    text-align: justify;
+}
+
+.about h1 {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.about p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}

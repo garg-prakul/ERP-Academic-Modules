@@ -17,11 +17,11 @@ app.set("view engine", "ejs"); // Ensure EJS is set as the view engine
 
 // Database connection
 const db = new pg.Client({
-    user: process.env.DB_USER || "postgres", // Ensure DB_USER is defined in .env
-    host: process.env.DB_HOST || "localhost", // Ensure DB_HOST is defined in .env
-    database: process.env.DB_NAME || "user_data", // Ensure DB_NAME is defined in .env
+    user: process.env.DB_USER , // Ensure DB_USER is defined in .env
+    host: process.env.DB_HOST , // Ensure DB_HOST is defined in .env
+    database: process.env.DB_NAME , // Ensure DB_NAME is defined in .env
     password: process.env.DB_PASSWORD , // Ensure DB_PASSWORD is defined in .env
-    port: process.env.DB_PORT || 5432, // Ensure DB_PORT is defined in .env
+    port: process.env.DB_PORT , // Ensure DB_PORT is defined in .env
 });
 
 db.connect()
@@ -39,7 +39,7 @@ const transporter = nodemailer.createTransport({
 
 // Determine user role based on email
 function getUserRole(email) {
-    if (email.endsWith("@student.iitmandi.ac.in")) return "student";
+    if (email.endsWith("@students.iitmandi.ac.in")) return "student";
     if (email.endsWith("@admin.iitmandi.ac.in")) return "admin";
     if (email.endsWith("@faculty.iitmandi.ac.in")) return "faculty";
     return "unknown";
@@ -54,7 +54,6 @@ app.get("/", (req, res) => {
 app.get("/login", (req, res) => {
     res.render("login.ejs");
 });
-
 
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
@@ -96,11 +95,13 @@ app.post("/register", async (req, res) => {
         // Check if the email is already registered
         const existingUser = await db.query("SELECT * FROM user_data WHERE email = $1", [email]);
         if (existingUser.rows.length > 0) {
+            console.log("Email is already registered:", email);
             return res.status(400).render("register.ejs", { error: "Email is already registered. Please log in." });
         }
 
         // Check if password and confirm password match
         if (password !== confirmPassword) {
+            console.log("Passwords do not match:", password, confirmPassword);
             return res.status(400).render("register.ejs", { error: "Passwords do not match. Please try again." });
         }
 
@@ -108,7 +109,14 @@ app.post("/register", async (req, res) => {
         const role = getUserRole(email);
 
         if (role === "unknown") {
-            return res.status(400).render("register.ejs",{error:"Invalid email domain. Please use your IIT Mandi email."});
+            console.log("Invalid email domain:", email);
+            return res.status(400).render("register.ejs", { error: "Invalid email domain. Please use your IIT Mandi email." });
+        }
+        
+
+        if (role === "unknown") {
+            console.log("Invalid email domain:", email);
+            return res.status(400).render("register.ejs", { error: "Invalid email domain. Please use your IIT Mandi email." });
         }
 
         const result = await db.query("INSERT INTO user_data (email, password) VALUES ($1, $2) RETURNING *", [email, hashedPassword]);
@@ -121,7 +129,7 @@ app.post("/register", async (req, res) => {
 
         res.status(201).send("User registered successfully!");
     } catch (error) {
-        console.error(error);
+        console.error("Error registering user:", error);
         res.status(500).send("Error registering user");
     }
 });
@@ -137,6 +145,7 @@ app.post("/forget-password", async (req, res) => {
         const result = await db.query("SELECT * FROM user_data WHERE email = $1", [email]);
 
         if (result.rows.length === 0) {
+            console.log("User not found:", email);
             return res.status(404).send("User not found");
         }
 
@@ -152,16 +161,20 @@ app.post("/forget-password", async (req, res) => {
             text: `Your verification code is: ${randomCode}. It is valid for 10 minutes.`,
         };
 
-        await transporter.sendMail(mailOptions);
-        console.log(`Verification code sent: ${randomCode}`);
-
-        res.render("verify.ejs", { email }); // Redirect to verify page
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error("Error sending email:", error);
+                return res.status(500).send(`Error sending verification code: ${error.message}`);
+            } else {
+                console.log(`Verification code sent to ${email}: ${randomCode}`);
+                res.render("verify.ejs", { email }); // Redirect to verify page
+            }
+        });
     } catch (error) {
-        console.error(error);
+        console.error("Error sending verification code:", error);
         res.status(500).send("Error sending verification code.");
     }
 });
-
 
 app.post("/verify", (req, res) => {
     const { email, code } = req.body;

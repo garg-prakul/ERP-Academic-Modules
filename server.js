@@ -85,6 +85,47 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.get("/register", (req, res) => {
+    res.render("register.ejs");
+});
+
+app.post("/register", async (req, res) => {
+    const { email, password, confirmPassword } = req.body;
+
+    try {
+        // Check if the email is already registered
+        const existingUser = await db.query("SELECT * FROM user_data WHERE email = $1", [email]);
+        if (existingUser.rows.length > 0) {
+            return res.status(400).render("register.ejs", { error: "Email is already registered. Please log in." });
+        }
+
+        // Check if password and confirm password match
+        if (password !== confirmPassword) {
+            return res.status(400).render("register.ejs", { error: "Passwords do not match. Please try again." });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const role = getUserRole(email);
+
+        if (role === "unknown") {
+            return res.status(400).render("register.ejs",{error:"Invalid email domain. Please use your IIT Mandi email."});
+        }
+
+        const result = await db.query("INSERT INTO user_data (email, password) VALUES ($1, $2) RETURNING *", [email, hashedPassword]);
+        console.log("User registered:", result.rows[0]);
+
+        // Redirect user to their respective page
+        if (role === "student") return res.render("student.ejs");
+        if (role === "faculty") return res.render("faculty.ejs");
+        if (role === "admin") return res.render("acadOffice.ejs");
+
+        res.status(201).send("User registered successfully!");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error registering user");
+    }
+});
+
 app.get("/forget-password", (req, res) => {
     res.render("../views/forget-password.ejs");
 });

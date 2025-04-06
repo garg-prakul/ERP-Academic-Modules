@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - Learnology</title>
+    <link rel="stylesheet" href="/student.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>LEARNOLOGY</span>
+            </div>
+            <div class="mobile-toggle" id="mobile-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="active">
+                    <a href="#"><i class="fas fa-th-large"></i> Dashboard</a>
+                </li>
+                <li>
+                    <a href="#"><i class="far fa-calendar"></i> My Calendar</a>
+                </li>
+                <li>
+                    <a href="#"><i class="far fa-file-alt"></i> Courses</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-clipboard-list"></i> Pre-Registration</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-poll"></i> Results</a>
+                </li>
+                <li>
+                    <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+                <div class="user-info">
+                    <div class="notifications">
+                        <i class="far fa-bell"></i>
+                    </div>
+                    <div class="profile">
+                        <img src="/asset/5856.jpg" alt="Profile">
+                        <div class="profile-info">
+
+                            <!--      # add argument from table that is student name -->
+
+                            <span class="name"><%= name %></span>                       
+                            <span class="role">Student</span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <div class="welcome-info">
+                        <img src="/asset/5856.jpg" alt="Profile">
+                        <div>
+                                                                                                <!--  #add student name
+                                                                                                  #add current date -->
+
+                            <h2>Welcome, <%= name %></h2>                                         
+                            <p><%= currDate %></p>                                 
+                        </div>
+                    </div>
+                    <div class="points-meter">
+                        <div class="meter-container">
+                            <div class="meter">
+                                <div class="gauge"></div>
+                            </div>
+                        </div>
+                        <div class="points-info">
+
+                            <!--  #add total credits -->
+
+                            <p>My Total Points</p>
+                            <h3>291</h3>                                                     
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- # show current courses of this sem from table -->
+
+
+                <!-- Progress Section -->
+                <div class="section-row">
+                    <div class="section progress-section">
+                        <div class="section-header">
+                            <h3>My Course Progress</h3>
+                        </div>
+                        <div class="progress-content">
+                            <div class="overall-progress">
+                                <div class="progress-circle">
+                                    <svg viewBox="0 0 36 36">
+                                        <path class="circle-bg"
+                                              d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="circle"
+                                              stroke-dasharray="75, 100"
+                                              d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <text x="18" y="20.35" class="percentage">75%</text>
+                                    </svg>
+                                    <p>Overall Progress</p>
+                                </div>
+                            </div>
+                            <div class="subject-progress">
+                                <h4>Course Progress</h4>
+                                <div class="progress-bar-container">
+                                    <div class="subject">CS101</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 76%"></div>
+                                    </div>
+                                    <div class="progress-value">76%</div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="subject">ENG205</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 90%"></div>
+                                    </div>
+                                    <div class="progress-value">90%</div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="subject">MTH103</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 83%"></div>
+                                    </div>
+                                    <div class="progress-value">83%</div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="subject">PHY201</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 70%"></div>
+                                    </div>
+                                    <div class="progress-value">70%</div>
+                                </div>
+                                <div class="progress-bar-container">
+                                    <div class="subject">HST120</div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 56%"></div>
+                                    </div>
+                                    <div class="progress-value">56%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Section -->
+                    <div class="section calendar-section">
+                        <div class="section-header">
+                            <h3>My Calendar</h3>
+                            <div class="section-actions">
+                                <button class="btn-add"><i class="fas fa-plus"></i> Add</button>
+                                <button class="btn-expand"><i class="fas fa-expand-alt"></i> Expand</button>
+                            </div>
+                        </div>
+                        <div class="calendar-navigation">
+                            <button class="btn-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn-next"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="calendar">
+                            <div class="weekdays">
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                                <div>Sun</div>
+                            </div>
+                            <div class="days">
+                                <div class="day prev-month">29</div>
+                                <div class="day prev-month">30</div>
+                                <div class="day prev-month">31</div>
+                                <div class="day">1</div>
+                                <div class="day">2</div>
+                                <div class="day">3</div>
+                                <div class="day">4</div>
+                                <div class="day">5</div>
+                                <div class="day event">
+                                    6
+                                    <span class="event-indicator">2 pending</span>
+                                </div>
+                                <div class="day">7</div>
+                                <div class="day">8</div>
+                                <div class="day">9</div>
+                                <div class="day">10</div>
+                                <div class="day">11</div>
+                                <div class="day">12</div>
+                                <div class="day">13</div>
+                                <div class="day">14</div>
+                                <div class="day">15</div>
+                                <div class="day">16</div>
+                                <div class="day event">
+                                    17
+                                    <span class="event-indicator">1 pending</span>
+                                </div>
+                                <div class="day">18</div>
+                                <div class="day">19</div>
+                                <div class="day">20</div>
+                                <div class="day event">
+                                    21
+                                    <span class="event-indicator">1 pending</span>
+                                </div>
+                                <div class="day">22</div>
+                                <div class="day">23</div>
+                                <div class="day">24</div>
+                                <div class="day">25</div>
+                                <div class="day">26</div>
+                                <div class="day">27</div>
+                                <div class="day">28</div>
+                                <div class="day">29</div>
+                                <div class="day">30</div>
+                                <div class="day next-month">1</div>
+                                <div class="day next-month">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- add semester wise courses  -->
+
+
+                <!-- Current Courses Section -->
+                <div class="section-row">
+                    <div class="section courses-section">
+                        <div class="section-header">
+                            <h3>My Current Courses</h3>
+                            <a href="#" class="view-all">View All</a>
+                        </div>
+                        <div class="courses-content">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>COURSE CODE</th>
+                                        <th>COURSE TITLE</th>
+                                        <th>INSTRUCTOR</th>
+                                        <th>CREDITS</th>
+                                        <th>SCHEDULE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CS101</td>
+                                        <td>Introduction to Computer Science</td>
+                                        <td>Dr. John Smith</td>
+                                        <td>4</td>
+                                        <td>MWF 10:00-11:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ENG205</td>
+                                        <td>Advanced Composition</td>
+                                        <td>Prof. Emma Johnson</td>
+                                        <td>3</td>
+                                        <td>TTh 13:00-14:30</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MTH103</td>
+                                        <td>Calculus I</td>
+                                        <td>Dr. Michael Chen</td>
+                                        <td>4</td>
+                                        <td>MWF 09:00-10:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>PHY201</td>
+                                        <td>General Physics</td>
+                                        <td>Prof. Sarah Wilson</td>
+                                        <td>4</td>
+                                        <td>TTh 10:00-11:30</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Section
+                <div class="section-row">
+                    <div class="section results-section">
+                        <div class="section-header">
+                            <h3>Results</h3>
+                            <a href="#" class="view-all">View All</a>
+                        </div>
+                        <div class="results-content">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>TERM</th>
+                                        <th>GPA</th>
+                                        <th>RANK</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Fall 2024</td>
+                                        <td>3.8</td>
+                                        <td>12</td>
+                                        <td><button class="btn-view">View Details</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Summer 2024</td>
+                                        <td>3.7</td>
+                                        <td>15</td>
+                                        <td><button class="btn-view">View Details</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Spring 2024</td>
+                                        <td>3.9</td>
+                                        <td>8</td>
+                                        <td><button class="btn-view">View Details</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Chat Button -->
+    <!-- <div class="chat-button">
+        <button>
+            <i class="fas fa-comments"></i>
+            <span>Chats</span>
+        </button>
+    </div> -->
+
+    <script>
+        // Simple JavaScript for mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileToggle = document.getElementById('mobile-toggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            function toggleSidebar() {
+                sidebar.classList.toggle('active');
+            }
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', toggleSidebar);
+            }
+            
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', toggleSidebar);
+            }
+        });
+    </script>
+</body>
+</html>

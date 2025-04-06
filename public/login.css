@@ -78,10 +78,12 @@ button {
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 button:hover {
     background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
 /* Responsive */

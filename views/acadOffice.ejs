@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>Admin Portal</h1>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#"><i class="fas fa-user-graduate"></i> Students</a></li>
+                    <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Faculty</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Initialization Settings</a></li>
+                    <li><a href="#"><i class="fas fa-file-alt"></i> Examination</a></li>
+                    <li><a href="#"><i class="fas fa-layer-group"></i> Batches & Sections</a></li>
+                    <li><a href="#"><i class="fas fa-redo"></i> Re-Registration</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Programme</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <h2>Welcome, Admin</h2>
+                <p>Manage students, faculty, courses, and settings efficiently.</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <h3>Total Students</h3>
+                    <p class="stat-number">1,200</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Faculty</h3>
+                    <p class="stat-number">150</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Ongoing Exams</h3>
+                    <p class="stat-number">5</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Registrations</h3>
+                    <p class="stat-number">45</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions Section -->
+            <div class="quick-actions-section">
+                <h3>Quick Actions</h3>
+                <div class="quick-actions-buttons">
+                    <button class="action-btn" onclick="window.location.href='/register'"><i class="fas fa-user-plus"></i> Add Student</button>
+                    <button class="action-btn" onclick="window.location.href='/register'"><i class="fas fa-user-tie"></i> Add Faculty</button>
+                    <button class="action-btn"><i class="fas fa-book-medical"></i> Add Course</button>
+                    <button class="action-btn"><i class="fas fa-calendar-alt"></i> Schedule Exam</button>
+                    <button class="action-btn"><i class="fas fa-edit"></i> Modify Program</button>
+                </div>
+            </div>
+
+            <!-- Announcements Section -->
+            <div class="announcements-section">
+                <h3>Announcements</h3>
+                <div class="announcement-actions">
+                    <button class="add-announcement-btn" id="addAnnouncementBtn">
+                        <i class="fas fa-plus"></i> Add Announcement
+                    </button>
+                </div>
+                <div class="announcement-list">
+                    <div class="announcement-item">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Mid-semester exams will start from March 15.</p>
+                        <div class="announcement-actions">
+                            <button class="icon-btn edit-btn"><i class="fas fa-edit"></i></button>
+                            <button class="icon-btn delete-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="announcement-item">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>New faculty onboarding session on Feb 28.</p>
+                        <div class="announcement-actions">
+                            <button class="icon-btn edit-btn"><i class="fas fa-edit"></i></button>
+                            <button class="icon-btn delete-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="announcement-item">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Course registration deadline extended to March 5.</p>
+                        <div class="announcement-actions">
+                            <button class="icon-btn edit-btn"><i class="fas fa-edit"></i></button>
+                            <button class="icon-btn delete-btn"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Toggle for Sidebar -->
+    <button class="mobile-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Add Announcement Modal -->
+    <div id="announcementModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Add New Announcement</h2>
+            <form id="announcementForm">
+                <div class="form-group">
+                    <label for="announcementText">Announcement Text</label>
+                    <textarea id="announcementText" rows="4" placeholder="Enter announcement message"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="announcementPriority">Priority</label>
+                    <select id="announcementPriority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelAnnouncement" class="cancel-btn">Cancel</button>
+                    <button type="submit" class="submit-btn">Save Announcement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.mobile-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Modal functionality
+        const modal = document.getElementById('announcementModal');
+        const addBtn = document.getElementById('addAnnouncementBtn');
+        const closeModal = document.querySelector('.close-modal');
+        const cancelBtn = document.getElementById('cancelAnnouncement');
+
+        addBtn.addEventListener('click', function() {
+            modal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Form submission (just prevents default for now)
+        document.getElementById('announcementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Get form data
+            const text = document.getElementById('announcementText').value;
+            const priority = document.getElementById('announcementPriority').value;
+            
+            // Here you would typically send data to server
+            console.log('New announcement:', { text, priority });
+            
+            // Close the modal
+            modal.style.display = 'none';
+            
+            // For demo purposes - add the announcement to the UI
+            if (text) {
+                const announcementList = document.querySelector('.announcement-list');
+                const newItem = document.createElement('div');
+                newItem.className = 'announcement-item';
+                newItem.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>${text}</p>
+                    <div class="announcement-actions">
+                        <button class="icon-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button class="icon-btn delete-btn"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                announcementList.prepend(newItem);
+            }
+        });
+    </script>
+</body>
+</html>

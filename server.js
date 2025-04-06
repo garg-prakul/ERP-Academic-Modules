@@ -59,28 +59,64 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const result = await db.query("SELECT password FROM user_data WHERE email = $1", [email]);
+        // Determine the role based on the email
+        const role = getUserRole(email);
 
-        if (result.rows.length > 0) {
-            const hashedPassword = result.rows[0].password;
-            const match = await bcrypt.compare(password, hashedPassword);
+        if (role === "student") {
+            const result = await db.query("SELECT * FROM student WHERE email = $1", [email]);
 
-            if (match) {
-                const role = getUserRole(email);
-                if (role === "student") return res.render("student.ejs");
-                if (role === "faculty") return res.render("faculty.ejs");
-                if (role === "admin") return res.render("acadOffice.ejs");
+            if (result.rows.length > 0) {
+                const hashedPassword = result.rows[0].password;
+                const match = await bcrypt.compare(password, hashedPassword);
 
-                return res.send("Login successful!");
+                if (match) {
+                    const name = result.rows[0].name;
+                    const currDate = new Date().toLocaleDateString(); // Get current date
+                    return res.render("student.ejs", { name: name, currDate: currDate });
+                } else {
+                    return res.status(401).render("login.ejs", { error: "Invalid password. Please try again." });
+                }
             } else {
-                res.status(401).redirect("/login");
+                return res.status(404).render("login.ejs", { error: "User not found. Please sign up." });
+            }
+        } else if (role === "faculty") {
+            const result = await db.query("SELECT * FROM faculty WHERE email = $1", [email]);
+
+            if (result.rows.length > 0) {
+                const hashedPassword = result.rows[0].password;
+                const match = await bcrypt.compare(password, hashedPassword);
+
+                if (match) {
+                    const name = result.rows[0].name;
+                    return res.render("faculty.ejs", { name: name });
+                } else {
+                    return res.status(401).render("login.ejs", { error: "Invalid password. Please try again." });
+                }
+            } else {
+                return res.status(404).render("login.ejs", { error: "User not found. Please sign up." });
+            }
+        } else if (role === "admin") {
+            const result = await db.query("SELECT * FROM admin WHERE email = $1", [email]);
+
+            if (result.rows.length > 0) {
+                const hashedPassword = result.rows[0].password;
+                const match = await bcrypt.compare(password, hashedPassword);
+
+                if (match) {
+                    const name = result.rows[0].name;
+                    return res.render("acadOffice.ejs", { name: name });
+                } else {
+                    return res.status(401).render("login.ejs", { error: "Invalid password. Please try again." });
+                }
+            } else {
+                return res.status(404).render("login.ejs", { error: "User not found. Please sign up." });
             }
         } else {
-            res.status(404).render("login.ejs", { error: "User not found. Please sign up." });
+            return res.status(400).render("login.ejs", { error: "Invalid email domain. Please use your IIT Mandi email." });
         }
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Error logging in");
+        console.error("Error logging in:", error);
+        res.status(500).render("login.ejs", { error: "An unexpected error occurred. Please try again later." });
     }
 });
 
@@ -89,48 +125,57 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-    const { email, password, confirmPassword } = req.body;
+    const { email, password, confirmPassword, name, department, student_id } = req.body;
 
     try {
-        // Check if the email is already registered
-        const existingUser = await db.query("SELECT * FROM user_data WHERE email = $1", [email]);
-        if (existingUser.rows.length > 0) {
-            console.log("Email is already registered:", email);
-            return res.status(400).render("register.ejs", { error: "Email is already registered. Please log in." });
-        }
-
-        // Check if password and confirm password match
-        if (password !== confirmPassword) {
-            console.log("Passwords do not match:", password, confirmPassword);
-            return res.status(400).render("register.ejs", { error: "Passwords do not match. Please try again." });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Determine the role based on the email
         const role = getUserRole(email);
 
-        if (role === "unknown") {
+        if (role === "student") {
+            // Check if the email is already registered in the student table
+            const existingUser = await db.query("SELECT * FROM student WHERE email = $1", [email]);
+            if (existingUser.rows.length > 0) {
+                console.log("Email is already registered:", email);
+                return res.status(400).render("register.ejs", { error: "Email is already registered. Please log in." });
+            }
+
+            // Check if password and confirm password match
+            if (password !== confirmPassword) {
+                console.log("Passwords do not match:", password, confirmPassword);
+                return res.status(400).render("register.ejs", { error: "Passwords do not match. Please try again." });
+            }
+
+            // Hash the password and insert the student into the database
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const query = `
+                INSERT INTO student (name, email, student_id, department, password)
+                VALUES ($1, $2, $3, $4, $5) RETURNING *`;
+            const values = [name, email, student_id, department, hashedPassword];
+
+            try {
+                const result = await db.query(query, values);
+                console.log("Student registered:", result.rows[0]);
+
+                // Render the student page with the student's name and current date
+                const currDate = new Date().toLocaleDateString(); // Get current date
+                return res.render("student.ejs", { name: name, currDate: currDate });
+            } catch (dbError) {
+                console.error("Database query error:", dbError);
+                return res.status(500).render("register.ejs", { error: "Database error. Please try again later." });
+            }
+        } else if (role === "faculty") {
+            // Handle faculty registration (if applicable)
+            // ...existing code...
+        } else if (role === "admin") {
+            // Handle admin registration (if applicable)
+            // ...existing code...
+        } else {
             console.log("Invalid email domain:", email);
             return res.status(400).render("register.ejs", { error: "Invalid email domain. Please use your IIT Mandi email." });
         }
-        
-
-        if (role === "unknown") {
-            console.log("Invalid email domain:", email);
-            return res.status(400).render("register.ejs", { error: "Invalid email domain. Please use your IIT Mandi email." });
-        }
-
-        const result = await db.query("INSERT INTO user_data (email, password) VALUES ($1, $2) RETURNING *", [email, hashedPassword]);
-        console.log("User registered:", result.rows[0]);
-
-        // Redirect user to their respective page
-        if (role === "student") return res.render("student.ejs");
-        if (role === "faculty") return res.render("faculty.ejs");
-        if (role === "admin") return res.render("acadOffice.ejs");
-
-        res.status(201).send("User registered successfully!");
     } catch (error) {
         console.error("Error registering user:", error);
-        res.status(500).send("Error registering user");
+        res.status(500).render("register.ejs", { error: "An unexpected error occurred. Please try again later." });
     }
 });
 

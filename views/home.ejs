@@ -3,51 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IIT Mandi</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/home.css"> <!-- Updated path -->
+    <title>IIT Mandi - Indian Institute of Technology Mandi</title>
+    <link rel="stylesheet" href="/home.css">
 </head>
 <body>
-
-    <!-- Header -->
-    <div class="header">
+    <header class="main-header">
         <div class="logo-container">
-            <img src="https://www.iitmandi.ac.in/images/logo_hires.png" alt="IIT Mandi Logo">
-            <h2>भारतीय प्रौद्योगिकी संस्थान मंडी</h2>
-            <h3>INDIAN INSTITUTE OF TECHNOLOGY MANDI</h3>
+            <img src="https://www.iitmandi.ac.in/images/logo_hires.png" alt="IIT Mandi Logo" class="logo">
+            <div class="university-name">
+                <span>Indian Institute</span>
+                <span>of Technology</span>
+                <span>Mandi</span>
+            </div>
         </div>
-        <div class="btn-container">
-            <button class="login-button" onclick="window.location.href='/login'">Login</button>
-            <button class="register-button" onclick="window.location.href='/register'">Register</button>
-        </div>
-    </div>
-
-    <!-- Navigation Bar -->
-    <div class="navbar">
-        <span class="menu-icon">☰</span>
-        <button class="myiit-button">
-            <img src="https://cdn-icons-png.flaticon.com/512/597/597177.png" alt="icon">
-            myIIT
+        
+        <button class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
+        
+        <nav class="main-nav">
+            <ul>
+                <li><a href="#">NEWS AND EVENTS</a></li>
+                <li><a href="/asset/Academic Calendar 2025.pdf" target="_blank">ACADEMIC CALENDER</a></li>
+                <li><a href="#">COURSES</a></li>
+                <li><a href="#">ABOUT IIT MANDI</a></li>
+            </ul>
+        </nav>
+        
+        <div class="utility-nav">
+            <!-- <a href="#" class="grid-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <rect x="1" y="1" width="6" height="6"></rect>
+                    <rect x="9" y="1" width="6" height="6"></rect>
+                    <rect x="17" y="1" width="6" height="6"></rect>
+                    <rect x="1" y="9" width="6" height="6"></rect>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                    <rect x="17" y="9" width="6" height="6"></rect>
+                    <rect x="1" y="17" width="6" height="6"></rect>
+                    <rect x="9" y="17" width="6" height="6"></rect>
+                    <rect x="17" y="17" width="6" height="6"></rect>
+                </svg>
+            </a> --> 
+            <!-- <div class="language-selector">
+                <a href="#" class="active">EN</a>
+                <span>|</span>
+                <a href="#">हिंदी</a>
+            </div> -->
+            <!-- <button class="theme-toggle">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+            <button class="search-button">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </button> -->
+            <div class="btn-container">
+                <button class="login-button" onclick="window.location.href='/login'">Login</button>
+                <button class="login-button" onclick="window.location.href='/register'">Add Student</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner Template Section -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <h1>Welcome to IIT Mandi</h1>
+            <p>Excellence in Education, Research and Innovation</p>
+            <div class="hero-buttons">
+                <a href="#" class="btn primary-btn">Explore Programs</a>
+                <a href="#" class="btn secondary-btn">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Template Container -->
+    <div class="content-container">
+        <!-- Main Template Section -->
+        <div class="main-sections">
+            <!-- News Template -->
+            <section class="template-section news-template">
+                <h2>News</h2>
+                <div class="section-content">
+                    <!-- News Template Card -->
+                    <div class="template-card">
+                        <div class="image-placeholder"></div>
+                        <div class="content-placeholder">
+                            <div class="tag-placeholder"></div>
+                            <div class="title-placeholder"></div>
+                            <div class="text-placeholder"></div>
+                        </div>
+                    </div>
+                    <!-- News Template Card -->
+                    <div class="template-card">
+                        <div class="image-placeholder"></div>
+                        <div class="content-placeholder">
+                            <div class="tag-placeholder"></div>
+                            <div class="title-placeholder"></div>
+                            <div class="text-placeholder"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Events Template -->
+            <section class="template-section events-template">
+                <h2>Events</h2>
+                <div class="section-content">
+                    <!-- Event Template Card -->
+                    <div class="event-template-card">
+                        <div class="date-placeholder"></div>
+                        <div class="content-placeholder">
+                            <div class="title-placeholder"></div>
+                            <div class="text-placeholder"></div>
+                        </div>
+                    </div>
+                    <!-- Event Template Card -->
+                    <div class="event-template-card">
+                        <div class="date-placeholder"></div>
+                        <div class="content-placeholder">
+                            <div class="title-placeholder"></div>
+                            <div class="text-placeholder"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Research Template -->
+            <section class="template-section research-template">
+                <h2>Research</h2>
+                <div class="section-content">
+                    <!-- Research Template Card -->
+                    <div class="template-card">
+                        <div class="image-placeholder"></div>
+                        <div class="content-placeholder">
+                            <div class="title-placeholder"></div>
+                            <div class="text-placeholder"></div>
+                        </div>
+                    </div>
+                    <!-- Research Template Card -->
+                    <div class="template-card">
+                        <div class="image-placeholder"></div>
+                        <div class="content-placeholder">
+                            <div class="title-placeholder"></div>
+                            <div class="text-placeholder"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Secondary Template Sections -->
+        <div class="secondary-sections">
+            <!-- Announcement Template -->
+            <section class="template-section announcement-template">
+                <h2>Announcements</h2>
+                <div class="announcement-list">
+                    <div class="announcement-item">
+                        <div class="date-placeholder small"></div>
+                        <div class="title-placeholder"></div>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="date-placeholder small"></div>
+                        <div class="title-placeholder"></div>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="date-placeholder small"></div>
+                        <div class="title-placeholder"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Links Template -->
+            <section class="template-section quicklinks-template">
+                <h2>Quick Links</h2>
+                <div class="links-list">
+                    <div class="link-item">
+                        <div class="icon-placeholder"></div>
+                        <div class="link-placeholder"></div>
+                    </div>
+                    <div class="link-item">
+                        <div class="icon-placeholder"></div>
+                        <div class="link-placeholder"></div>
+                    </div>
+                    <div class="link-item">
+                        <div class="icon-placeholder"></div>
+                        <div class="link-placeholder"></div>
+                    </div>
+                    <div class="link-item">
+                        <div class="icon-placeholder"></div>
+                        <div class="link-placeholder"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </div>
 
-    <!-- Banner Image -->
-    <img src="asset/mandi.JPG" class="banner" alt="IIT Mandi Campus">
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://www.iitmandi.ac.in/images/footer_logo.png" alt="IIT Mandi Logo" class="logo">
+                <div>Indian Institute of Technology Mandi</div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <p>IIT Mandi, Kamand Campus</p>
+                    <p>Himachal Pradesh, India - 175075</p>
+                    <p>Phone: +91-1905-267000</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Academics</a></li>
+                        <li><a href="#">Admissions</a></li>
+                        <li><a href="#">Research</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-icon">FB</a>
+                        <a href="#" class="social-icon">TW</a>
+                        <a href="#" class="social-icon">IN</a>
+                        <a href="#" class="social-icon">YT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 Indian Institute of Technology Mandi. All rights reserved.
+        </div>
+    </footer>
 
-    <!-- About Section -->
-    <div class="about">
-        <h1>About IIT Mandi</h1>
-        <p>
-            The Indian Institute of Technology Mandi is one among the eighth newer second-generation of IITs.
-            IIT Mandi is a research university now located in Kamand Valley, Mandi city in Mandi district of Himachal Pradesh.
-        </p>
-        <p>
-            IIT Mandi's campus (about 14 km from Mandi) is on the left bank of the Uhl River at Kamand and Salgi villages.
-            There is great variation in the climatic conditions of Himachal due to...
-        </p>
-    </div>
-    
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+            document.querySelector('.main-nav').classList.toggle('open');
+            this.classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

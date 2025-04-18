@@ -135,32 +135,104 @@
                                     <p>Overall Progress</p>
                                 </div>
                             </div>
-                            
+                            <div class="subject-progress bg-white rounded-xl shadow-lg p-6 mt-6">
+                                <h4 class="text-xl font-semibold text-blue-600 mb-4 border-b pb-2">Course Progress</h4>
+                              
+                                <% 
+                                  const semesters = Object.keys(coursesBySemester); 
+                                  const lastSemester = semesters[semesters.length - 1]; 
+                                  if (lastSemester && coursesBySemester[lastSemester]) { 
+                                %>
+                                  <ul class="list-disc pl-5 text-gray-800 space-y-2">
+                                    <% coursesBySemester[lastSemester].forEach(courseObj => { %>
+                                      <li>
+                                        <span class="font-medium"><%= courseObj.course %></span>
+                                      </li>
+                                    <% }) %>
+                                  </ul>
+                                <% } else { %>
+                                  <p class="text-gray-500 italic">No courses available for the last semester.</p>
+                                <% } %>
+                              </div>
                               
                         </div>
                     </div>
                 </div>
-                <div class="subject-progress bg-white rounded-xl shadow-lg p-6 mt-6">
-                    <h4 class="text-xl font-semibold text-blue-600 mb-4 border-b pb-2">Course Progress</h4>
-                  
-                    <% 
-                      const semesters = Object.keys(coursesBySemester); 
-                      const lastSemester = semesters[semesters.length - 1]; 
-                      if (lastSemester && coursesBySemester[lastSemester]) { 
-                    %>
-                      <ul class="list-disc pl-5 text-gray-800 space-y-2">
-                        <% coursesBySemester[lastSemester].forEach(courseObj => { %>
-                          <li>
-                            <span class="font-medium"><%= courseObj.course %></span>
-                          </li>
-                        <% }) %>
-                      </ul>
-                    <% } else { %>
-                      <p class="text-gray-500 italic">No courses available for the last semester.</p>
-                    <% } %>
-                  </div>
+
                     <!-- Calendar Section -->
-                    
+                    <div class="section calendar-section">
+                        <div class="section-header">
+                            <h3>My Calendar</h3>
+                            <div class="section-actions">
+                                <button class="btn-add"><i class="fas fa-plus"></i> Add</button>
+                                <button class="btn-expand"><i class="fas fa-expand-alt"></i> Expand</button>
+                            </div>
+                        </div>
+                        <div class="calendar-navigation">
+                            <button class="btn-prev"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn-next"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="calendar">
+                            <div class="weekdays">
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                                <div>Sun</div>
+                            </div>
+                            <div class="days">
+                                <div class="day prev-month">29</div>
+                                <div class="day prev-month">30</div>
+                                <div class="day prev-month">31</div>
+                                <div class="day">1</div>
+                                <div class="day">2</div>
+                                <div class="day">3</div>
+                                <div class="day">4</div>
+                                <div class="day">5</div>
+                                <div class="day event">
+                                    6
+                                    <span class="event-indicator">2 pending</span>
+                                </div>
+                                <div class="day">7</div>
+                                <div class="day">8</div>
+                                <div class="day">9</div>
+                                <div class="day">10</div>
+                                <div class="day">11</div>
+                                <div class="day">12</div>
+                                <div class="day">13</div>
+                                <div class="day">14</div>
+                                <div class="day">15</div>
+                                <div class="day">16</div>
+                                <div class="day event">
+                                    17
+                                    <span class="event-indicator">1 pending</span>
+                                </div>
+                                <div class="day">18</div>
+                                <div class="day">19</div>
+                                <div class="day">20</div>
+                                <div class="day event">
+                                    21
+                                    <span class="event-indicator">1 pending</span>
+                                </div>
+                                <div class="day">22</div>
+                                <div class="day">23</div>
+                                <div class="day">24</div>
+                                <div class="day">25</div>
+                                <div class="day">26</div>
+                                <div class="day">27</div>
+                                <div class="day">28</div>
+                                <div class="day">29</div>
+                                <div class="day">30</div>
+                                <div class="day next-month">1</div>
+                                <div class="day next-month">2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- Semester wise Courses Section
                 <div class="section-row">
                     <div class="section courses-section">

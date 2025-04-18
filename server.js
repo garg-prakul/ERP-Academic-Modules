@@ -72,7 +72,53 @@ app.post("/login", async (req, res) => {
                 if (match) {
                     const name = result.rows[0].name;
                     const currDate = new Date().toLocaleDateString(); // Get current date
-                    return res.render("student.ejs", { name: name, currDate: currDate });
+
+                    const studentId = result.rows[0].student_id;
+                    try {
+                        // Fetch semester-wise courses and grades
+                        const courseTable = await db.query(`
+                            SELECT 
+                                s.semester_number, 
+                                s.year, 
+                                c.name AS course_name, 
+                                e.grade, 
+                                c.credits
+                            FROM enrollment e
+                            JOIN course c ON e.course_id = c.course_id
+                            JOIN semester s ON e.semester_id = s.semester_id
+                            WHERE e.student_id = $1
+                            ORDER BY s.year ASC, s.semester_number ASC;
+                        `, [studentId]);
+
+                        // Organize courses by semester
+                        const coursesBySemester = {};
+                        let totalCredits = 0;
+
+                        courseTable.rows.forEach(row => {
+                            const semester = `Semester ${row.semester_number} (${row.year})`;
+                            if (!coursesBySemester[semester]) {
+                                coursesBySemester[semester] = [];
+                            }
+
+                            coursesBySemester[semester].push({
+                                course: row.course_name,
+                                grade: row.grade,
+                                credits: row.credits
+                            });
+
+                            // Assuming passing grade is not 'F'
+                            if (row.grade !== 'F') {
+                                totalCredits += row.credits;
+                            }
+                        });
+
+                        return res.render("student.ejs", { name: name, currDate: currDate, coursesBySemester: coursesBySemester, totalCredits: totalCredits });
+
+                    } catch (err) {
+                        console.error("Error fetching courses:", err);
+                        return res.status(500).render("login.ejs", { error: "Error fetching courses. Please try again later." });
+                    }
+
                 } else {
                     return res.status(401).render("login.ejs", { error: "Invalid password. Please try again." });
                 }
@@ -80,6 +126,7 @@ app.post("/login", async (req, res) => {
                 return res.status(404).render("login.ejs", { error: "User not found. Please sign up." });
             }
         } else if (role === "faculty") {
+            // Handle faculty login
             const result = await db.query("SELECT * FROM faculty WHERE email = $1", [email]);
 
             if (result.rows.length > 0) {
@@ -96,6 +143,7 @@ app.post("/login", async (req, res) => {
                 return res.status(404).render("login.ejs", { error: "User not found. Please sign up." });
             }
         } else if (role === "admin") {
+            // Handle admin login
             const result = await db.query("SELECT * FROM admin WHERE email = $1", [email]);
 
             if (result.rows.length > 0) {
@@ -116,7 +164,7 @@ app.post("/login", async (req, res) => {
         }
     } catch (error) {
         console.error("Error logging in:", error);
-        res.status(500).render("login.ejs", { error: "An unexpected error occurred. Please try again later." });
+        return res.status(500).render("login.ejs", { error: "An unexpected error occurred. Please try again later." });
     }
 });
 

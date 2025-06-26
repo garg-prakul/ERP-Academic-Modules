@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Fill Enrollment</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+    }
+    .form-container {
+      margin-top: 100px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container form-container">
+  <h2 class="text-center mb-4">Auto Fill Enrollment Table</h2>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form action="/enrollment" method="POST">
+        <div class="form-group">
+          <label for="year">Academic Year</label>
+          <input type="number" class="form-control" id="year" name="year" placeholder="e.g., 2025" required>
+        </div>
+        <div class="form-group">
+          <label for="sem_type">Semester Type</label>
+          <select class="form-control" id="sem_type" name="sem_type" required>
+            <option value="" disabled selected>Select semester type</option>
+            <option value="odd">Odd</option>
+            <option value="even">Even</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Fill Enrollment</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

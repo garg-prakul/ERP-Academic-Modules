@@ -1,0 +1,97 @@
+<%- include('partials/header') %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Courses</title>
+  <link rel="stylesheet" href="/AddCourses.css">
+</head>
+<h2>Add New Course</h2>
+
+<form method="POST" action="/add-course">
+    <table class="form-table">
+        <tr>
+            <td><label for="course_code">Course Code:</label></td>
+            <td><input type="text" id="course_code" name="course_code" required></td>
+        </tr>
+        <tr>
+            <td><label for="course_name">Course Name:</label></td>
+            <td><input type="text" id="course_name" name="course_name" required></td>
+        </tr>
+        <tr>
+            <td><label for="instructor_name">Instructor Name:</label></td>
+            <td><input type="text" id="instructor_name" name="instructor_name" required></td>
+        </tr>
+        <tr>
+            <td><label for="instructor_id">Instructor ID:</label></td>
+            <td><input type="text" id="instructor_id" name="instructor_id" required></td>
+        </tr>
+        <tr>
+            <td><label for="avail">Available:</label></td>
+            <td>
+                <select id="avail" name="avail">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="icornot">IC or Not:</label></td>
+            <td>
+                <select id="icornot" name="icornot">
+                    <option value="IC">IC</option>
+                    <option value="Non-IC">Non-IC</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="slot">Slot:</label></td>
+            <td>
+                <select id="slot" name="slot">
+                    <% ["A","B","C","D","E","F","G","H","FS"].forEach(s => { %>
+                        <option value="<%= s %>"><%= s %></option>
+                    <% }) %>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="ltpc">LTPC:</label></td>
+            <td><input type="text" id="ltpc" name="ltpc"></td>
+        </tr>
+        <tr>
+            <td><label for="credit">Credit:</label></td>
+            <td><input type="number" id="credit" name="credit"></td>
+        </tr>
+        <tr>
+            <td><label>DC For:</label></td>
+            <td>
+                <div class="checkbox-group">
+                    <% deforOptions.forEach(opt => { %>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="dc_<%= opt %>" name="dcfor" value="<%= opt %>">
+                            <label for="dc_<%= opt %>"><%= opt %></label>
+                        </div>
+                    <% }) %>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td><label>DE For:</label></td>
+            <td>
+                <div class="checkbox-group">
+                    <% deforOptions.forEach(opt => { %>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="de_<%= opt %>" name="defor" value="<%= opt %>">
+                            <label for="de_<%= opt %>"><%= opt %></label>
+                        </div>
+                    <% }) %>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+    <div class="form-actions">
+        <button type="submit">Add Course</button>
+    </div>
+</form>
+
+<%- include('partials/footer') %>

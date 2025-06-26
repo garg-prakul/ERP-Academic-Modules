@@ -1,0 +1,42 @@
+<%- include('partials/header') %>
+<h2>Course List</h2>
+
+<form method="GET" action="/course-list">
+  <input type="text" name="search" placeholder="Search by code or name" value="<%= search || '' %>">
+  <button type="submit">Search</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>Course Code</th>
+      <th>Course Name</th>
+      <th>Instructor</th>
+      <th>Type</th>
+      <th>Slot</th>
+      <th>Credits</th>
+      <th>LTPC</th>
+      <!-- Add more columns as needed -->
+    </tr>
+  </thead>
+  <tbody>
+    <% if (courses && courses.length) { %>
+      <% courses.forEach(course => { %>
+        <tr>
+          <td><%= course.course_code %></td>
+          <td><%= course.course_name %></td>
+          <td><%= course.instructor_name %></td>
+          <td><%= course.type %></td>
+          <td><%= course.slot %></td>
+          <td><%= course.credit %></td>
+          <td><%= course.ltpc %></td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr>
+        <td colspan="7">No matching courses found.</td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
+<%- include('partials/footer') %>

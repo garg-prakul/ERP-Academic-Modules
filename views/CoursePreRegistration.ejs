@@ -1,0 +1,147 @@
+<%- include('partials/header') %>
+<h2>Course Pre-Registration</h2>
+<p>Remaining Submissions: <%= 10 - submissionCount %></p>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Pre-Registration</title>
+    <link rel="stylesheet" href="/CoursePreRegistration.css">
+  </head>
+  
+
+<form action="/submit-pre-registration" method="POST">
+    <input type="hidden" name="roll_no" value="<%= student.roll_no %>">
+    <% Object.entries(coursesBySlot).forEach(([slot, courses]) => { %>
+        <div class="slot-group">
+            <h3>Slot <%= slot %></h3>
+            <% courses.forEach(course => { %>
+                <div class="course-card">
+                    <label>
+                        <input type="checkbox" 
+                               name="selectedCourses[]" 
+                               value="<%= course.course_code %>">
+                        <%= course.course_name %> (<%= course.course_code %>)
+                        <br>Credits: <%= course.credit %>
+                        <% if(course.icornot === 'IC') { %>
+                            <span class="ic-tag">IC Course</span>
+                        <% } %>
+                    </label>
+                </div>
+            <% }) %>
+        </div>
+    <% }) %>
+    
+    <div class="form-actions">
+        <p id="courseCount">Selected Courses: 0</p>
+        <button type="submit" id="submitBtn">Submit Pre-Registration</button>
+    </div>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const courseCount = document.getElementById('courseCount');
+        const selectAllBtns = document.querySelectorAll('.select-all-btn');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const scrollTopBtn = document.querySelector('.scroll-top');
+        
+        // Update course count
+        function updateCount() {
+            const count = document.querySelectorAll('input[type="checkbox"]:checked').length;
+            courseCount.textContent = `Selected Courses: ${count}`;
+        }
+        
+        // Update card selection visual
+        function updateCardSelection() {
+            document.querySelectorAll('.course-card').forEach(card => {
+                const checkbox = card.querySelector('input[type="checkbox"]');
+                if (checkbox.checked) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+        }
+        
+        // Handle checkbox changes
+        checkboxes.forEach(cb => cb.addEventListener('change', function() {
+            updateCount();
+            updateCardSelection();
+        }));
+        
+        // Select all courses in a slot
+        selectAllBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const slot = this.getAttribute('data-slot');
+                const slotGroup = this.closest('.slot-group');
+                const slotCheckboxes = slotGroup.querySelectorAll('input[type="checkbox"]');
+                
+                // Check if all are selected
+                const allSelected = Array.from(slotCheckboxes).every(cb => cb.checked);
+                
+                // Toggle selection
+                slotCheckboxes.forEach(cb => {
+                    cb.checked = !allSelected;
+                });
+                
+                // Update button text
+                this.textContent = allSelected ? 'Select All' : 'Deselect All';
+                
+                updateCount();
+                updateCardSelection();
+            });
+        });
+        
+        // Filter courses
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update active state
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                const courseCards = document.querySelectorAll('.course-card');
+                
+                courseCards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else if (filter === 'ic') {
+                        card.style.display = card.classList.contains('ic-course') ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+        
+        // Scroll to top button
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Form validation
+        form.addEventListener('submit', function(e) {
+            const checked = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checked.length === 0) {
+                e.preventDefault();
+                alert('Please select at least one course');
+            }
+        });
+        
+        // Initialize the card selection visual on page load
+        updateCardSelection();
+    });
+    </script>
+<%- include('partials/footer') %>
+

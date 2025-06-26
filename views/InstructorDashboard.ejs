@@ -1,0 +1,157 @@
+<%- include('partials/header') %>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Registration</title>
+  <link rel="stylesheet" href="/InstructorDashboad.css">
+</head>
+
+<div class="dashboard-container">
+  <h2 class="dashboard-title">Welcome, <%= instructor.instructor_name %></h2>
+
+  <div class="nav-buttons">
+    <button onclick="showSection('preRegistration')" class="btn btn-primary">Pre-Registration Requests</button>
+    <button onclick="showSection('finalRegistration')" class="btn btn-primary">View Registered Students</button>
+  </div>
+
+  <div id="preRegistration" class="section">
+    <div class="course-selector">
+      <label for="courseSelect">Select Course:</label>
+      <select id="courseSelect" onchange="showCourseRequests(this.value)">
+        <option value="">Select a course</option>
+        <% courses.forEach(course => { %>
+          <option value="<%= course.course_code %>">
+            <%= course.course_code %> - <%= course.course_name %> (Slot <%= course.slot %>)
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <% courses.forEach(course => { %>
+      <div id="<%= course.course_code %>" class="course-section" style="display: none;">
+        <h3 class="course-title"><%= course.course_name %> (Slot <%= course.slot %>)</h3>
+        
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Roll No</th>
+                <th>Submission Count</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (course.requests && Array.isArray(course.requests)) { %>
+                <% course.requests.forEach(request => { %>
+                  <tr>
+                    <td><%= request.student_name %></td>
+                    <td><%= request.roll_no %></td>
+                    <td><%= request.submission_count %></td>
+                    <td>
+                      <form action="/update-status/<%= request.id %>?_method=PUT" method="POST">
+                        <select name="status" class="status-select <%= request.status %>" onchange="this.form.submit()">
+                          <option value="pending" <%= request.status === 'pending' ? 'selected' : '' %>>Pending</option>
+                          <option value="accepted" <%= request.status === 'accepted' ? 'selected' : '' %>>Accept</option>
+                          <option value="rejected" <%= request.status === 'rejected' ? 'selected' : '' %>>Reject</option>
+                        </select>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="4" class="no-data">No pending requests for this course</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <div id="finalRegistration" class="section" style="display: none;">
+    <h3 class="section-title">Registered Students by Course</h3>
+    <% courses.forEach(course => { %>
+      <div class="course-details">
+        <h4 class="course-subtitle"><%= course.course_name %> (<%= course.course_code %>)</h4>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Roll No</th>
+                <th>Slot</th>
+              </tr>
+            </thead>
+            <tbody id="registered-<%= course.course_code %>">
+              <!-- Will be populated via AJAX -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<script>
+function showSection(sectionId) {
+  document.querySelectorAll('.section').forEach(section => {
+    section.style.display = 'none';
+  });
+  document.getElementById(sectionId).style.display = 'block';
+  
+  if (sectionId === 'finalRegistration') {
+    loadRegisteredStudents();
+  }
+}
+
+function loadRegisteredStudents() {
+  fetch('/get-registered-students')
+    .then(response => response.json())
+    .then(data => {
+      data.forEach(course => {
+        const tbody = document.getElementById(`registered-${course.course_code}`);
+        if (tbody) {
+          if (course.students && course.students.length > 0) {
+            tbody.innerHTML = course.students.map(student => `
+              <tr>
+                <td>${student.student_name}</td>
+                <td>${student.roll_no}</td>
+                <td>${student.slot}</td>
+              </tr>
+            `).join('');
+          } else {
+            tbody.innerHTML = '<tr><td colspan="3" class="no-data">No students registered for this course</td></tr>';
+          }
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Error loading registered students:', error);
+    });
+}
+
+function showCourseRequests(courseCode) {
+  // Hide all course sections
+  document.querySelectorAll('.course-section').forEach(section => {
+    section.style.display = 'none';
+  });
+  
+  // Show selected course section
+  if (courseCode) {
+    const selectedSection = document.getElementById(courseCode);
+    if (selectedSection) {
+      selectedSection.style.display = 'block';
+    }
+  }
+}
+
+// Initialize the page with the pre-registration section shown
+document.addEventListener('DOMContentLoaded', function() {
+  showSection('preRegistration');
+});
+</script>
+
+<%- include('partials/footer') %>

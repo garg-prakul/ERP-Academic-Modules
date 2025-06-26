@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+
+<h2>Course Registration</h2>
+<p>Total Credits Selected: <span id="totalCredits">0</span></p>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Registration</title>
+    <link rel="stylesheet" href="/CourseRegistration.css">
+  </head>
+
+<form action="/submit-registration" method="POST">
+    <input type="hidden" name="roll_no" value="<%= student.roll_no %>">
+    
+    <% Object.entries(coursesBySlot).forEach(([slot, courses]) => { %>
+        <div class="slot-group">
+            <h3>Slot <%= slot %></h3>
+            <select name="courses[]" class="slot-select" 
+                    data-slot="<%= slot %>" 
+                    onchange="updateTotalCredits()">
+                <option value="">None</option>
+                <% courses.forEach(course => { %>
+                    <option value="<%= course.course_code %>|<%= course.slot %>|<%= course.credit %>" 
+                            data-credit="<%= course.credit %>">
+                        <%= course.course_name %> (<%= course.credit %> credits)
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+    <% }) %>
+    
+    <button type="submit" id="submitBtn">Finalize Registration</button>
+</form>
+
+<script>
+function updateTotalCredits() {
+    let total = 0;
+    const selectedCourses = new Set();
+    let hasConflict = false;
+    
+    document.querySelectorAll('.slot-select').forEach(select => {
+        const selectedOption = select.options[select.selectedIndex];
+        const courseCode = selectedOption.value;
+        
+        if(courseCode) {
+            if(selectedCourses.has(courseCode)) {
+                hasConflict = true;
+            }
+            selectedCourses.add(courseCode);
+            total += parseInt(selectedOption.dataset.credit);
+        }
+    });
+    
+    document.getElementById('totalCredits').textContent = total;
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = total < 12 || total > 25 || hasConflict;
+    submitBtn.title = hasConflict ? 'You cannot select the same course twice' :
+                      total < 12 ? 'Minimum 12 credits required' :
+                      total > 25 ? 'Maximum 25 credits allowed' : '';
+}
+</script>
+
+<%- include('partials/footer') %>
+

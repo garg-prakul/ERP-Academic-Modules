@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Faculty</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Faculty Management System</h1>
+    <div class="nav">
+      <a href="/viewfaculty" class="nav-link">Faculty</a>
+      <a href="/" class="nav-link">Home</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>All Faculty Members</h2>
+    <p>Displaying <%= faculty.length %> faculty records</p>
+    
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Faculty ID</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% faculty.forEach(member => { %>
+          <tr>
+            <td><%= member.instructor_id %></td>
+            <td><%= member.instructor_name %></td>
+
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    &copy; <%= new Date().getFullYear() %> Faculty Management System
+  </div>
+</body>
+</html>

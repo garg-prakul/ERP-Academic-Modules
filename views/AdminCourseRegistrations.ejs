@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <h2>Course Registration Overview</h2>
+    
+    <% courses.forEach(course => { %>
+        <div class="course-section">
+            <h3><%= course.course_name %> (<%= course.course_code %>)</h3>
+            <p>Instructor: <%= course.instructor_name %></p>
+            <p>Total Students: <%= course.student_count %></p>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Student Name</th>
+                        <th>Branch</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (course.students && course.students[0] !== null) { %>
+                        <% course.students.forEach(student => { %>
+                            <tr>
+                                <td><%= student.roll_no %></td>
+                                <td><%= student.student_name %></td>
+                                <td><%= student.branch_code %></td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="3">No students registered</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    <% }) %>
+    
+    <!-- <div class="actions">
+        <a href="/acadOffice" class="btn btn-primary">Back to Dashboard</a>
+    </div> -->
+</div>
+
+
+<%- include('partials/footer') %>

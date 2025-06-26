@@ -23,15 +23,27 @@
           <form action="/register" method="POST">
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" class="form-control" name="username" required>
+              <input type="email" class="form-control" name="email" required>
             </div>
             <div class="form-group">
               <label for="password">Password</label>
               <input type="password" class="form-control" name="password" required>
             </div>
             <div class="form-group">
-              <label for="confirm_password">Confirm Password</label>
-              <input type="password" class="form-control" name="confirm_password" required>
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" class="form-control" name="confirmPassword" required>
+            </div>
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text" class="form-control" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="student_branch_code">branch</label>
+              <input type="text" class="form-control" name="student_branch_code" required>
+            </div>
+            <div class="form-group">
+              <label for="roll_no">Roll No</label>
+              <input type="text" class="form-control" name="roll_no" required>
             </div>
             <button type="submit" class="btn btn-dark">Register</button>
           </form>

@@ -1,0 +1,38 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <h2>Pre-Registered Courses</h2>
+    
+    <% if (courses && courses.length > 0) { %>
+        <table class="course-table">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Slot</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% courses.forEach(course => { %>
+                    <tr>
+                        <td><%= course.course_code %></td>
+                        <td><%= course.course_name %></td>
+                        <td><%= course.credit %></td>
+                        <td><%= course.slot %></td>
+                        <td><%= course.status %></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No courses pre-registered yet.</p>
+    <% } %>
+
+    <div class="actions">
+        <a href="/course-pre-registration" class="btn">Back to Pre-Registration</a>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

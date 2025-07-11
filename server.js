@@ -1,5 +1,5 @@
-import express from "express";
 import dotenv from "dotenv";
+import express from "express";
 import bcrypt from "bcrypt";
 import pg from "pg";
 import bodyParser from "body-parser";
@@ -11,36 +11,21 @@ import pgSession from 'connect-pg-simple';
 
 dotenv.config();
 const app = express();
-const port = process.env.SERVER_PORT || 4000; // Ensure SERVER_PORT is defined in .env
+const port = process.env.SERVER_PORT || 4000; 
 let verificationCodes = {}; // Store codes temporarily
 
+
+// middlewares
+app.use(cookieParser())
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public")); // Updated path to serve static files
 app.set("view engine", "ejs"); // Ensure EJS is set as the view engine
 
+
 // Database connection
-const db = new pg.Client({
-    user: process.env.DB_USER , // Ensure DB_USER is defined in .env
-    host: process.env.DB_HOST , // Ensure DB_HOST is defined in .env
-    database: process.env.DB_NAME , // Ensure DB_NAME is defined in .env
-    password: process.env.DB_PASSWORD , // Ensure DB_PASSWORD is defined in .env
-    port: process.env.DB_PORT , // Ensure DB_PORT is defined in .env
-});
+import pool from './db/index.js';
 
-db.connect()
-    .then(() => console.log("Connected to database"))
-    .catch((err) => console.error("Database connection error:", err));
-
-// Nodemailer setup
-// not working currently
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-});
 
 // Add before other middleware
 app.use(session({
@@ -91,7 +76,7 @@ app.post("/login", async (req, res) => {
 
         if (role === "student") {
            // Change this query in the login route
-            const result = await db.query("SELECT * FROM students WHERE email = $1", [email]);
+            const result = await query("SELECT * FROM students WHERE email = $1", [email]);
 
             if (result.rows.length > 0) {
                 const hashedPassword = result.rows[0].password;
@@ -104,7 +89,7 @@ app.post("/login", async (req, res) => {
 
                     try {
                         // Updated query with new table and column names
-                        const courseTable = await db.query(`
+                        const courseTable = await query(`
                             SELECT 
                                 s.semester_number, 
                                 s.year,     
@@ -167,7 +152,7 @@ app.post("/login", async (req, res) => {
                 : "SELECT * FROM instructors WHERE email = $1";
             
             console.log('Faculty login attempt for:', email); // Debug log
-            const result = await db.query(query, [email]);
+            const result = await query(query, [email]);
             console.log('Query result:', result.rows); // Debug log
         
             if (result.rows.length > 0) {
@@ -192,7 +177,7 @@ app.post("/login", async (req, res) => {
             }
         } else if (role === "admin") {
             // Handle admin login
-            const result = await db.query("SELECT * FROM admin WHERE email = $1", [email]);
+            const result = await query("SELECT * FROM admin WHERE email = $1", [email]);
 
             if (result.rows.length > 0) {
                 const hashedPassword = result.rows[0].password;
@@ -254,7 +239,7 @@ app.post("/enrollment", async (req, res) => {
     const semNumbers = sem_type === 'odd' ? [1, 3, 5, 7] : [2, 4, 6, 8];
   
     try {
-        await db.query('BEGIN');
+        await query('BEGIN');
 
         // First insert enrollments
         const insertQuery = `
@@ -281,10 +266,10 @@ app.post("/enrollment", async (req, res) => {
             RETURNING *;
         `;
   
-        const result = await db.query(insertQuery, [year, semNumbers]);
+        const result = await query(insertQuery, [year, semNumbers]);
 
         // Reset all students' submission counts and clear registration tables
-        await db.query(`
+        await query(`
             UPDATE students 
             SET submission_count = 0,
                 registration_count = 0 
@@ -295,10 +280,10 @@ app.post("/enrollment", async (req, res) => {
         );
 
         // Clear registration tables
-        await db.query("DELETE FROM course_registration");
-        await db.query("DELETE FROM course_pre_registration");
+        await query("DELETE FROM course_registration");
+        await query("DELETE FROM course_pre_registration");
 
-        await db.query('COMMIT');
+        await query('COMMIT');
 
         res.status(201).json({
             success: true,
@@ -308,7 +293,7 @@ app.post("/enrollment", async (req, res) => {
         });
 
     } catch (err) {
-        await db.query('ROLLBACK');
+        await query('ROLLBACK');
         console.error("Error in enrollment process:", err);
         res.status(500).json({ 
             error: "Internal server error", 
@@ -336,7 +321,7 @@ app.post("/register", async (req, res) => {
         }
 
         // Check if student already exists
-        const checkUser = await db.query("SELECT * FROM students WHERE email = $1 OR roll_no = $2", [email, roll_no]);
+        const checkUser = await query("SELECT * FROM students WHERE email = $1 OR roll_no = $2", [email, roll_no]);
         if (checkUser.rows.length > 0) {
             return res.render("register.ejs", { error: "Student with this email or roll number already exists" });
         }
@@ -350,7 +335,7 @@ app.post("/register", async (req, res) => {
             VALUES ($1, $2, $3, $4, $5)
             RETURNING *`;
         
-        const result = await db.query(insertQuery, [name, email, roll_no, student_branch_code, hashedPassword]);
+        const result = await query(insertQuery, [name, email, roll_no, student_branch_code, hashedPassword]);
         
         // Redirect to student dashboard
         res.render("student.ejs", {
@@ -373,7 +358,7 @@ app.post('/admin-register', async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
   
       // Insert into admin table
-      await db.query(
+      await query(
         'INSERT INTO admin (admin_id, admin_name, email, password) VALUES ($1, $2, $3, $4)',
         [admin_id, admin_name, email, hashedPassword]
       );
@@ -394,7 +379,7 @@ app.post('/admin-register', async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
   
       // Insert into instructors table
-      await db.query(
+      await query(
         'INSERT INTO instructors (instructor_id, instructor_name, course_code, email, password) VALUES ($1, $2, $3, $4, $5)',
         [instructor_id, instructor_name, course_code, email, hashedPassword]
       );
@@ -417,7 +402,7 @@ app.post('/admin-register', async (req, res) => {
     const { roll_no, semester_number, year } = req.body;
   
     try {
-      await db.query(
+      await query(
         `INSERT INTO semester (roll_no, semester_number, year)
          VALUES ($1, $2, $3)`,
         [ roll_no, semester_number, year]
@@ -441,7 +426,7 @@ app.post("/forget-password", async (req, res) => {
     const { email } = req.body;
 
     try {
-        const result = await db.query("SELECT * FROM user_data WHERE email = $1", [email]);
+        const result = await query("SELECT * FROM user_data WHERE email = $1", [email]);
 
         if (result.rows.length === 0) {
             console.log("User not found:", email);
@@ -502,7 +487,7 @@ app.post("/verify", (req, res) => {
 // Get all courses
 app.get("/all-courses", requireAuth, async (req, res) => {
     try {
-        const allCourses = await db.query("SELECT * FROM courses");
+        const allCourses = await query("SELECT * FROM courses");
         res.render("AllCourses", { 
             courses: allCourses.rows,
             search: req.query.search || ''
@@ -515,7 +500,7 @@ app.get("/all-courses", requireAuth, async (req, res) => {
 
 app.get("/course-list", requireAuth, async (req, res) => {
     try {
-        const allCourses = await db.query("SELECT * FROM courses");
+        const allCourses = await query("SELECT * FROM courses");
         res.render("CourseList", { 
             courses: allCourses.rows,
             search: req.query.search || ''
@@ -558,7 +543,7 @@ app.post("/add-course", requireAuth, async (req, res) => {
         const dcforArray = Array.isArray(dcfor) ? dcfor : [dcfor];
         const deforArray = Array.isArray(defor) ? defor : [defor];
         console.log("hello");
-        const newCourse = await db.query(
+        const newCourse = await query(
             `INSERT INTO courses (course_code, course_name, instructor_name, instructor_id, avail, dcfor, defor, icornot, slot, credit, ltpc)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
             [course_code, course_name, instructor_name, instructor_id, avail, dcforArray, deforArray, icornot, slot, credit, ltpc]
@@ -575,7 +560,7 @@ app.post("/add-course", requireAuth, async (req, res) => {
 app.get("/edit-course/:course_code", requireAuth, async (req, res) => {
     try {
         const { course_code } = req.params;
-        const course = await db.query("SELECT * FROM courses WHERE course_code = $1", [course_code]);
+        const course = await query("SELECT * FROM courses WHERE course_code = $1", [course_code]);
         
         if (course.rows.length === 0) {
             return res.render("error", { message: "Course not found" });
@@ -614,7 +599,7 @@ app.put("/edit-course/:course_code", requireAuth, async (req, res) => {
         const dcforArray = Array.isArray(dcfor) ? dcfor : [dcfor];
         const deforArray = Array.isArray(defor) ? defor : [defor];
         
-        const updateResult = await db.query(
+        const updateResult = await query(
             `UPDATE courses 
             SET course_name = $1, instructor_name = $2, instructor_id = $3, 
             avail = $4, dcfor = $5, defor = $6, icornot = $7, 
@@ -642,7 +627,7 @@ app.delete("/courses/:course_code", requireAuth, async (req, res) => {
         const { course_code } = req.params;
         
         // First check if course exists in enrollments
-        const enrollmentCheck = await db.query(
+        const enrollmentCheck = await query(
             "SELECT COUNT(*) FROM enrollment WHERE course_code = $1",
             [course_code]
         );
@@ -654,7 +639,7 @@ app.delete("/courses/:course_code", requireAuth, async (req, res) => {
         }
         
         // If no enrollments, proceed with deletion
-        const deleteResult = await db.query(
+        const deleteResult = await query(
             "DELETE FROM courses WHERE course_code = $1 RETURNING *",
             [course_code]
         );
@@ -680,7 +665,7 @@ app.get('/course-pre-registration', requireAuth, async (req, res) => {
         const student = req.session.user;
         
         // Check if student exists and get current submission count
-        const studentResult = await db.query(
+        const studentResult = await query(
             'SELECT submission_count FROM students WHERE roll_no = $1',
             [student.roll_no]
         );
@@ -693,7 +678,7 @@ app.get('/course-pre-registration', requireAuth, async (req, res) => {
         }
 
         // Get eligible courses - Fixed array comparison
-        const courses = await db.query(`
+        const courses = await query(`
             SELECT c.*, 
                    COALESCE(
                        (SELECT status 
@@ -728,7 +713,7 @@ app.get('/course-pre-registration', requireAuth, async (req, res) => {
 
 app.post('/submit-pre-registration', requireAuth, async (req, res) => {
     try {
-        await db.query('BEGIN');
+        await query('BEGIN');
         const student = req.session.user;
         
         console.log('Request body:', req.body); // Debug log
@@ -742,7 +727,7 @@ app.post('/submit-pre-registration', requireAuth, async (req, res) => {
         console.log('Selected courses:', selectedCourses); // Debug log
 
         // First, check if student has already submitted 3 times
-        const studentCheck = await db.query(
+        const studentCheck = await query(
             'SELECT submission_count FROM students WHERE roll_no = $1',
             [student.roll_no]
         );
@@ -754,7 +739,7 @@ app.post('/submit-pre-registration', requireAuth, async (req, res) => {
 
         // Insert pre-registrations one by one to avoid array issues
         for (const courseCode of selectedCourses) {
-            await db.query(`
+            await query(`
                 INSERT INTO course_pre_registration 
                 (roll_no, course_code, status) 
                 VALUES ($1, $2, 'pending')
@@ -764,16 +749,16 @@ app.post('/submit-pre-registration', requireAuth, async (req, res) => {
         }
 
         // Update submission count
-        await db.query(`
+        await query(`
             UPDATE students 
             SET submission_count = submission_count + 1 
             WHERE roll_no = $1
         `, [student.roll_no]);
 
-        await db.query('COMMIT');
+        await query('COMMIT');
         res.redirect('/pre-registered-courses');
     } catch (err) {
-        await db.query('ROLLBACK');
+        await query('ROLLBACK');
         console.error('Pre-registration error:', err); // Debug log
         res.status(500).render('error', { 
             message: `Pre-registration failed: ${err.message}` 
@@ -791,7 +776,7 @@ app.get('/pre-registered-courses', requireAuth, async (req, res) => {
         const { roll_no } = req.session.user;
         console.log("Fetching pre-registered courses for:", roll_no); // Debug log
 
-        const result = await db.query(`
+        const result = await query(`
             SELECT pr.*, c.*
             FROM course_pre_registration pr
             JOIN courses c ON pr.course_code = c.course_code
@@ -818,7 +803,7 @@ app.get('/course-registration', requireAuth, async (req, res) => {
         const { roll_no } = req.session.user;
         
         // Check registration attempt count
-        const registrationCheck = await db.query(
+        const registrationCheck = await query(
             'SELECT registration_count FROM students WHERE roll_no = $1',
             [roll_no]
         );
@@ -830,7 +815,7 @@ app.get('/course-registration', requireAuth, async (req, res) => {
         }
 
         // First check if student has any accepted pre-registrations
-        const acceptedCourses = await db.query(`
+        const acceptedCourses = await query(`
             SELECT c.* 
             FROM course_pre_registration pr
             JOIN courses c ON pr.course_code = c.course_code
@@ -845,7 +830,7 @@ app.get('/course-registration', requireAuth, async (req, res) => {
         }
 
         // Check if student has already registered
-        const existingRegistration = await db.query(
+        const existingRegistration = await query(
             'SELECT * FROM course_registration WHERE roll_no = $1',
             [roll_no]
         );
@@ -873,11 +858,11 @@ app.get('/course-registration', requireAuth, async (req, res) => {
 
 app.post('/submit-registration', requireAuth, async (req, res) => {
     try {
-        await db.query('BEGIN');
+        await query('BEGIN');
         const { roll_no } = req.session.user;
 
         // Check registration attempt count
-        const registrationCheck = await db.query(
+        const registrationCheck = await query(
             'SELECT registration_count FROM students WHERE roll_no = $1',
             [roll_no]
         );
@@ -911,7 +896,7 @@ app.post('/submit-registration', requireAuth, async (req, res) => {
         }
 
         // Verify selected courses are pre-registered and accepted
-        const verificationResult = await db.query(`
+        const verificationResult = await query(`
             SELECT course_code 
             FROM course_pre_registration
             WHERE roll_no = $1 
@@ -924,7 +909,7 @@ app.post('/submit-registration', requireAuth, async (req, res) => {
         }
 
         // Update registration count before inserting courses
-        await db.query(`
+        await query(`
             UPDATE students 
             SET registration_count = registration_count + 1 
             WHERE roll_no = $1
@@ -932,16 +917,16 @@ app.post('/submit-registration', requireAuth, async (req, res) => {
 
         // Insert registrations
         for (const course of selectedCourses) {
-            await db.query(`
+            await query(`
                 INSERT INTO course_registration (roll_no, course_code, slot)
                 VALUES ($1, $2, $3)
             `, [roll_no, course.courseCode, course.slot]);
         }
 
-        await db.query('COMMIT');
+        await query('COMMIT');
         res.redirect('/registered-courses');
     } catch (err) {
-        await db.query('ROLLBACK');
+        await query('ROLLBACK');
         console.error('Registration error:', err);
         res.status(500).render('error', { 
             message: `Registration failed: ${err.message}` 
@@ -955,7 +940,7 @@ app.get('/registered-courses', requireAuth, async (req, res) => {
         const { roll_no } = req.session.user;
 
         // Get registered courses with full course details and credit total
-        const result = await db.query(`
+        const result = await query(`
             SELECT 
                 cr.roll_no,
                 cr.course_code,
@@ -1003,7 +988,7 @@ app.get('/instructor-dashboard', requireAuth, async (req, res) => {
 
         console.log('Instructor ID:', req.session.user.instructor_id);
 
-        const result = await db.query(`
+        const result = await query(`
             SELECT 
                 c.course_code,
                 c.course_name,
@@ -1052,7 +1037,7 @@ app.put('/update-status/:id', requireAuth, async (req, res) => {
         const { status } = req.body;
         
         // Verify instructor has authority without using course_code
-        const verification = await db.query(`
+        const verification = await query(`
             SELECT c.instructor_id, pr.roll_no
             FROM course_pre_registration pr
             JOIN courses c ON pr.course_code = c.course_code
@@ -1063,7 +1048,7 @@ app.put('/update-status/:id', requireAuth, async (req, res) => {
             throw new Error('Unauthorized status update');
         }
 
-        await db.query(`
+        await query(`
             UPDATE course_pre_registration
             SET status = $1
             WHERE id = $2
@@ -1085,7 +1070,7 @@ app.get('/get-registered-students', requireAuth, async (req, res) => {
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        const result = await db.query(`
+        const result = await query(`
             SELECT 
                 c.course_code,
                 c.course_name,
@@ -1117,7 +1102,7 @@ app.get('/admin/course-registrations', requireAuth, async (req, res) => {
             });
         }
 
-        const result = await db.query(`
+        const result = await query(`
             SELECT 
                 c.course_code,
                 c.course_name,
@@ -1144,7 +1129,7 @@ app.get('/admin/course-registrations', requireAuth, async (req, res) => {
 // View Students
 app.get("/viewstudents", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM students");
+    const result = await query("SELECT * FROM students");
     res.render("viewstudents", { students: result.rows });
   } catch (err) {
     console.error("Error fetching students:", err.stack);
@@ -1155,7 +1140,7 @@ app.get("/viewstudents", async (req, res) => {
 // View Faculty
 app.get("/viewfaculty", async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM instructors");
+    const result = await query("SELECT * FROM instructors");
     res.render("viewfaculty", { faculty: result.rows });
   } catch (err) {
     console.error("Error fetching faculty:", err.stack);

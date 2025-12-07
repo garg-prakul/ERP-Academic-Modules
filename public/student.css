@@ -306,6 +306,12 @@ body {
     margin-bottom: 20px;
     flex-wrap: wrap;
 }
+.sectio-row {
+    
+    
+    margin-bottom: 20px;
+    
+}
 
 .section {
     background-color: #fff;
@@ -704,3 +710,16 @@ body {
     color: #6b7280;
   }
   
+
+  .course-progress-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.course-progress-content ul {
+    width: 100%;
+}
+
+.course-progress-content li {
+    margin-bottom: 0.75rem;
+}

@@ -1,0 +1,225 @@
+/* Instructor Dashboard Styles */
+
+/* Base Styles */
+:root {
+    --primary-color: #4a6fdc;
+    --primary-hover: #3d5cb8;
+    --secondary-color: #f8f9fa;
+    --accent-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --dark-color: #343a40;
+    --light-color: #f8f9fa;
+    --gray-color: #6c757d;
+    --border-color: #dee2e6;
+    --box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  /* Typography */
+  .dashboard-title {
+    color: var(--dark-color);
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--primary-color);
+  }
+  
+  .course-title {
+    color: var(--dark-color);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .section-title {
+    color: var(--dark-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .course-subtitle {
+    color: var(--dark-color);
+    font-size: 1.25rem;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+  
+  /* Navigation Buttons */
+  .nav-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+  
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--primary-hover);
+    box-shadow: var(--box-shadow);
+  }
+  
+  /* Sections */
+  .section {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Course Selector */
+  .course-selector {
+    margin-bottom: 2rem;
+  }
+  
+  .course-selector label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--dark-color);
+  }
+  
+  #courseSelect {
+    width: 100%;
+    max-width: 500px;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    background-color: white;
+  }
+  
+  /* Tables */
+  .table-responsive {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .data-table thead {
+    background-color: var(--primary-color);
+    color: black;
+  }
+  
+  .data-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+  }
+  
+  .data-table td {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+    vertical-align: middle;
+  }
+  
+  .data-table tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  
+  .data-table tr:hover {
+    background-color: rgba(74, 111, 220, 0.05);
+  }
+  
+  .no-data {
+    text-align: center;
+    color: var(--gray-color);
+    font-style: italic;
+    padding: 1.5rem !important;
+  }
+  
+  /* Status Select */
+  .status-select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--border-color);
+    background-color: white;
+    cursor: pointer;
+  }
+  
+  .status-select.pending {
+    border-left: 4px solid var(--warning-color);
+  }
+  
+  .status-select.accepted {
+    border-left: 4px solid var(--accent-color);
+  }
+  
+  .status-select.rejected {
+    border-left: 4px solid var(--danger-color);
+  }
+  
+  /* Course Details */
+  .course-details {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .course-details:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .nav-buttons {
+      flex-direction: column;
+    }
+    
+    .btn {
+      width: 100%;
+    }
+    
+    .dashboard-title {
+      font-size: 1.75rem;
+    }
+    
+    .section {
+      padding: 1rem;
+    }
+    
+    .data-table th,
+    .data-table td {
+      padding: 0.75rem 0.5rem;
+    }
+  }

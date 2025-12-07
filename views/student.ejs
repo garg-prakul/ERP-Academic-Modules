@@ -27,19 +27,22 @@
                     <a href="#"><i class="fas fa-th-large"></i> Dashboard</a>
                 </li>
                 <li>
-                    <a href="#"><i class="far fa-calendar"></i> My Calendar</a>
+                    <a href="/course-list"><i class="far fa-file-alt"></i> Courses</a>
                 </li>
                 <li>
-                    <a href="#"><i class="far fa-file-alt"></i> Courses</a>
+                    <a href="/course-pre-registration"><i class="fas fa-clipboard-list"></i> Pre-Registration</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-clipboard-list"></i> Pre-Registration</a>
+                    <a href="/pre-registered-courses"><i class="fas fa-clipboard-list"></i> Pre-Registered Courses</a>
                 </li>
                 <li>
                     <a href="#"><i class="fas fa-poll"></i> Results</a>
                 </li>
                 <li>
-                    <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+                    <a href="/course-registration  "><i class="fas fa-clipboard-list"></i> Course Registration</a>
+                </li>
+                <li>
+                    <a href="/registered-courses  "><i class="fas fa-clipboard-list"></i> Registered Courses</a>
                 </li>
             </ul>
         </div>
@@ -81,9 +84,7 @@
                     <div class="welcome-info">
                         <img src="/asset/5856.jpg" alt="Profile">
                         <div>
-                                                                                                <!--  #add student name
-                                                                                                  #add current date -->
-
+                                            
                             <h2>Welcome, <%= name %></h2>                                         
                             <p><%= currDate %></p>                                 
                         </div>
@@ -124,6 +125,25 @@
                                                 a 15.9155 15.9155 0 0 1 0 31.831
                                                 a 15.9155 15.9155 0 0 1 0 -31.831"/>
                                         <path class="circle"
+                                              stroke-dasharray="<%= (totalCredits / 40) * 100 %>, 100"
+                                              d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <text x="18" y="20.35" class="percentage">
+                                            <%= Math.round((totalCredits / 40) * 100) %>%
+                                        </text>
+                                    </svg>
+                                    <p>IC Progress</p>
+                                </div>
+                            </div>
+                            <div class="overall-progress">
+                                <div class="progress-circle">
+                                    <svg viewBox="0 0 36 36">
+                                        <path class="circle-bg"
+                                              d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="circle"
                                               stroke-dasharray="<%= (totalCredits / 160) * 100 %>, 100"
                                               d="M18 2.0845
                                                 a 15.9155 15.9155 0 0 1 0 31.831
@@ -135,54 +155,61 @@
                                     <p>Overall Progress</p>
                                 </div>
                             </div>
+                            <div class="overall-progress">
+                                <div class="progress-circle">
+                                    <svg viewBox="0 0 36 36">
+                                        <path class="circle-bg"
+                                              d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <path class="circle"
+                                              stroke-dasharray="<%= (totalCredits / 160) * 100 %>, 100"
+                                              d="M18 2.0845
+                                                a 15.9155 15.9155 0 0 1 0 31.831
+                                                a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                                        <text x="18" y="20.35" class="percentage">
+                                            <%= Math.round((totalCredits / 100) * 100) %>%
+                                        </text>
+                                    </svg>
+                                    <p>DC Progress</p>
+                                </div>
+                            </div>
                             
                               
                         </div>
                     </div>
                 </div>
-                <div class="subject-progress bg-white rounded-xl shadow-lg p-6 mt-6">
-                    <h4 class="text-xl font-semibold text-blue-600 mb-4 border-b pb-2">Course Progress</h4>
-                  
-                    <% 
-                      const semesters = Object.keys(coursesBySemester); 
-                      const lastSemester = semesters[semesters.length - 1]; 
-                      if (lastSemester && coursesBySemester[lastSemester]) { 
-                    %>
-                      <ul class="list-disc pl-5 text-gray-800 space-y-2">
-                        <% coursesBySemester[lastSemester].forEach(courseObj => { %>
-                          <li>
-                            <span class="font-medium"><%= courseObj.course %></span>
-                          </li>
-                        <% }) %>
-                      </ul>
-                    <% } else { %>
-                      <p class="text-gray-500 italic">No courses available for the last semester.</p>
-                    <% } %>
-                  </div>
-                    <!-- Calendar Section -->
-                    
-                <!-- Semester wise Courses Section
-                <div class="section-row">
-                    <div class="section courses-section">
-                        <div class="section-header">
-                            <h3>My Current Courses</h3>
-                            <a href="#" class="view-all">View All</a>
-                        </div>
-                        <div class="courses-content">
-                            <h2>Your Courses and Grades</h2>
-
-                            <% for (let semester in coursesBySemester) { %>
-                              <h3>Semester <%= semester %></h3>
-                              <ul>
-                                <% coursesBySemester[semester].forEach(courseObj => { %>
-                                  <li><strong><%= courseObj.course %></strong> - Grade: <%= courseObj.grade %></li>
-                                <% }) %>
-                              </ul>
-                            <% } %>
-                            
-                        </div>
+            <!-- Replace the existing course progress section with this -->
+       <!-- Replace the existing course progress section -->
+                <div class="sectio-row subject-progress bg-white rounded-xl shadow-lg p-6 mt-6">
+                    <!-- Header Section -->
+                    <div class="course-progress-header mb-4">
+                        <h4 class="text-xl font-semibold text-blue-600 border-b pb-2">Current Courses</h4>
+                        
                     </div>
-                </div> -->
+                    
+                    <!-- Content Section with flex-col -->
+                    <div class="course-progress-content mt-4 flex flex-col">
+                        <% 
+                        const semesters = Object.keys(coursesBySemester); 
+                        const lastSemester = semesters[semesters.length - 1]; 
+                        if (lastSemester && coursesBySemester[lastSemester]) { 
+                        %>
+                            <ul class="list-disc pl-5 text-gray-800 space-y-3">
+                                <% coursesBySemester[lastSemester].forEach(courseObj => { %>
+                                    <li class="block w-full mb-2">
+                                        <span class="font-medium block"><%= courseObj.course %> </span>
+                                    </li>
+                                <% }) %>
+                            </ul>
+                        <% } else { %>
+                            <p class="text-gray-500 italic">No courses available for the last semester.</p>
+                        <% } %>
+                    </div>
+                </div>
+                    
+                    
+                
 
                 <div class="section-row">
                     <div class="section courses-section shadow-lg rounded-xl bg-white p-6">
@@ -197,7 +224,7 @@
                         <% for (let semester in coursesBySemester) { %>
                           <div class="semester-section">
                             <h3 class="text-blue-600 font-semibold text-md border-b border-blue-100 pb-1 mb-2">
-                              Semester <%= semester %>
+                              <%= semester %>
                             </h3>
                             <ul class="pl-4 list-disc text-gray-700 space-y-1">
                               <% coursesBySemester[semester].forEach(courseObj => { %>

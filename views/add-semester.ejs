@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Update Semester</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="/public/register.css">
+</head>
+
+<body>
+
+<div class="container mt-5">
+  <h1>Update Semester Details</h1>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+
+          <form action="/add-semester" method="POST">
+            <div class="form-group">
+                <label for="roll_no">Roll No</label>
+                <input type="text" class="form-control" name="roll_no" required>
+            </div>
+            <div class="form-group">
+                <label for="semester_number">Semester Number</label>
+                <input type="number" class="form-control" name="semester_number" required>
+            </div>
+            <div class="form-group">
+                <label for="year">Year</label>
+                <input type="number" class="form-control" name="year" required>
+            </div>
+            <button type="submit" class="btn btn-dark">Update Semester</button>
+        </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="text-center mt-5">
+  <p>&copy; 2025 Your Company. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

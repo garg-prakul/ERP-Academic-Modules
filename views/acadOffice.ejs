@@ -16,14 +16,14 @@
             </div>
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="#"><i class="fas fa-user-graduate"></i> Students</a></li>
-                    <li><a href="#"><i class="fas fa-chalkboard-teacher"></i> Faculty</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Courses</a></li>
-                    <li><a href="#"><i class="fas fa-cog"></i> Initialization Settings</a></li>
+                    <li><a href="/viewstudents"><i class="fas fa-user-graduate"></i> Students</a></li>
+                    <li><a href="/viewfaculty"><i class="fas fa-chalkboard-teacher"></i> Faculty</a></li>
+                    <li><a href="/course-list"><i class="fas fa-book"></i> Courses</a></li>
+                    <li><a href="/admin/course-registrations"><i class="fas fa-book"></i>Registration data</a></li>
                     <li><a href="#"><i class="fas fa-file-alt"></i> Examination</a></li>
-                    <li><a href="#"><i class="fas fa-layer-group"></i> Batches & Sections</a></li>
+                    <!-- <li><a href="#"><i class="fas fa-layer-group"></i> Batches & Sections</a></li>
                     <li><a href="#"><i class="fas fa-redo"></i> Re-Registration</a></li>
-                    <li><a href="#"><i class="fas fa-book"></i> Programme</a></li>
+                    <li><a href="#"><i class="fas fa-book"></i> Programme</a></li> -->
                 </ul>
             </nav>
         </aside>
@@ -61,10 +61,12 @@
                 <h3>Quick Actions</h3>
                 <div class="quick-actions-buttons">
                     <button class="action-btn" onclick="window.location.href='/register'"><i class="fas fa-user-plus"></i> Add Student</button>
-                    <button class="action-btn" onclick="window.location.href='/register'"><i class="fas fa-user-tie"></i> Add Faculty</button>
-                    <button class="action-btn"><i class="fas fa-book-medical"></i> Add Course</button>
-                    <button class="action-btn"><i class="fas fa-calendar-alt"></i> Schedule Exam</button>
-                    <button class="action-btn"><i class="fas fa-edit"></i> Modify Program</button>
+                    <button class="action-btn" onclick="window.location.href='/faculty-register'"><i class="fas fa-user-tie"></i> Add Faculty</button>
+                    <button class="action-btn" onclick="window.location.href='/admin-register'"><i class="fas fa-user-tie"></i> Add Admin</button>
+                    <button class="action-btn" onclick="window.location.href='/add-semester'"><i class="fas fa-user-tie"></i> semester</button>
+                    <button class="action-btn" onclick="window.location.href='/enrollment'"><i class="fas fa-edit"></i> Enrollment </button>
+                    <button class="action-btn" onclick="window.location.href='/add-course'"><i class="fas fa-book-medical"></i> Add Course</button>
+                    <button class="action-btn" onclick="window.location.href='/all-courses'"><i class="fas fa-calendar-alt"></i> Manage Courses</button>
                 </div>
             </div>
 
